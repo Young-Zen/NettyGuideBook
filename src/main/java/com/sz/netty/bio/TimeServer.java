@@ -23,9 +23,7 @@ public class TimeServer {
                 // 采用默认值
             }
         }
-        ServerSocket server = null;
-        try {
-            server = new ServerSocket(port);
+        try (ServerSocket server = new ServerSocket(port)) {
             System.out.println("The time server is start in port : " + port);
             Socket socket = null;
             while (true) {
@@ -34,11 +32,7 @@ public class TimeServer {
                 ;
             }
         } finally {
-            if (server != null) {
-                System.out.println("The time server close");
-                server.close();
-                server = null;
-            }
+            System.out.println("The time server close");
         }
     }
 }

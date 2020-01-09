@@ -19,18 +19,11 @@ public class TimeServerHandler implements Runnable {
         this.socket = socket;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.lang.Runnable#run()
-     */
     @Override
     public void run() {
-        BufferedReader in = null;
-        PrintWriter out = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            out = new PrintWriter(this.socket.getOutputStream(), true);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+             PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true)) {
+
             String currentTime = null;
             String body = null;
             while (true) {
@@ -43,17 +36,6 @@ public class TimeServerHandler implements Runnable {
                 out.println(currentTime);
             }
         } catch (IOException e) {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            if (out != null) {
-                out.close();
-                out = null;
-            }
             if (this.socket != null) {
                 try {
                     this.socket.close();
